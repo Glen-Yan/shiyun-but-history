@@ -104,11 +104,12 @@ html, body, #root {
   position: absolute;
   top: 12px; right: 16px;
   width: 280px;
+  max-height: 70vh;
   background: rgba(10,10,18,0.95);
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 10px;
   z-index: 20;
-  overflow: hidden;
+  overflow-y: auto;
 }
 .search-header {
   display: flex; align-items: center; gap: 6px;

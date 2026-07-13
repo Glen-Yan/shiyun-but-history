@@ -90,6 +90,9 @@ export function FlyControls() {
       }
     };
     const onWheel = (e: WheelEvent) => {
+      // 鼠标在 UI 面板上时，不拦截滚轮（让面板正常滚动）
+      const target = e.target as HTMLElement;
+      if (target.closest(".search-panel, .hud-btn, .search-results, .dynasty-panel, .person-panel")) return;
       speedMul.current = Math.min(60, Math.max(0.1, speedMul.current * (e.deltaY > 0 ? 0.82 : 1.22)));
       st().setSpeed(speedMul.current);
     };

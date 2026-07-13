@@ -42,7 +42,7 @@ export function PathFinder() {
       </button>
 
       {open && (
-        <div className="search-panel" style={{ top: 52 }}>
+        <div className="search-panel" style={{ top: 52, width: 320 }}
           <div className="search-header">
             <span style={{ fontSize: 13, fontWeight: 600 }}>关系寻路 · 六度分隔</span>
             <button className="hud-btn" onClick={() => setOpen(false)}>✕</button>
