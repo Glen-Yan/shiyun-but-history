@@ -1,4 +1,5 @@
 import { useStore } from "../state/store";
+import { personTo3D } from "../engine/positions";
 
 export function SearchPanel() {
   const searchOpen = useStore(s => s.searchOpen);
@@ -7,6 +8,7 @@ export function SearchPanel() {
   const setSearch = useStore(s => s.setSearch);
   const selectPerson = useStore(s => s.selectPerson);
   const toggleSearch = useStore(s => s.toggleSearch);
+  const flyToPerson = useStore(s => s.flyToPerson);
 
   if (!searchOpen) {
     return (
@@ -34,7 +36,13 @@ export function SearchPanel() {
           {searchResults.map(p => (
             <li
               key={p.id}
-              onClick={() => { selectPerson(p); toggleSearch(); }}
+              onClick={() => {
+                selectPerson(p);
+                toggleSearch();
+                // 计算 3D 位置并飞到人物星点
+                const pos = personTo3D(p);
+                flyToPerson(pos);
+              }}
             >
               <span className="result-name">{p.name}</span>
               <span className="result-dynasty">{p.dynasty}</span>

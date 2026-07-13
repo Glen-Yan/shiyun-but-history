@@ -80,6 +80,9 @@ interface State {
   setPathEnd: (id: string | null) => void;
   setPathResult: (r: PathResult | null) => void;
   incRebuild: () => void;
+  // 相机飞到目标人物
+  flyTarget: [number, number, number] | null;
+  flyToPerson: (pos: [number, number, number] | null) => void;
 }
 
 const ALL_DYNASTY_KEYS = DYNASTIES.map(d => d.key);
@@ -178,4 +181,6 @@ export const useStore = create<State>((set, get) => ({
   setPathEnd: (pathEnd) => set({ pathEnd, pathResult: null }),
   setPathResult: (pathResult) => set({ pathResult }),
   incRebuild: () => set(s => ({ rebuildKey: s.rebuildKey + 1 })),
+  flyTarget: null,
+  flyToPerson: (flyTarget) => set({ flyTarget }),
 }));

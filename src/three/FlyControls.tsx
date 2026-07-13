@@ -111,9 +111,41 @@ export function FlyControls() {
     };
   }, [camera, gl]);
 
+  // ── 飞行到目标人物 ──
+  const flyRef = useRef<THREE.Vector3 | null>(null);
+  useEffect(() => {
+    const unsub = useStore.subscribe(s => {
+      if (s.flyTarget) {
+        flyRef.current = new THREE.Vector3(s.flyTarget[0], s.flyTarget[1], s.flyTarget[2]);
+        // 清除 flyTarget，避免重复触发
+        if (s.flyTarget) useStore.getState().flyToPerson(null);
+      }
+    });
+    return unsub;
+  }, []);
+
+  // ── WASD 飞行 ──
   useFrame((_, dt) => {
     const st = useStore.getState();
     if (st.cinema) return;
+
+    // 相机飞向目标（平滑插值）
+    if (flyRef.current) {
+      const target = flyRef.current;
+      const dir = target.clone().sub(camera.position);
+      // 目标在人物外围停住（距离 ~300）
+      const dist = dir.length();
+      if (dist < 350) {
+        flyRef.current = null; // 到达，停止飞行
+      } else {
+        dir.normalize();
+        const speed = Math.max(200, dist * 0.15) * Math.min(dt, 0.05);
+        camera.position.add(dir.multiplyScalar(speed));
+        // 让相机看向目标
+        camera.lookAt(target);
+      }
+      return;
+    }
 
     const k = keys.current;
     const v = new THREE.Vector3();
