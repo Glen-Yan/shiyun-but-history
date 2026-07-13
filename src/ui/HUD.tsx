@@ -1,6 +1,7 @@
 import { useStore } from "../state/store";
 import { DynastyFilter } from "./DynastyFilter";
 import { PathFinder } from "./PathFinder";
+import { SearchPanel } from "./SearchPanel";
 
 export function HUD() {
   const loaded = useStore(s => s.loaded);
@@ -23,6 +24,7 @@ export function HUD() {
         <div className="hud-actions">
           <DynastyFilter />
           <span className="hud-info">⚡{Math.round(speed * 100)}%</span>
+          <SearchPanel />
           <PathFinder />
           <button className="hud-btn" onClick={toggleQuality} title="画质切换">
             {quality === "high" ? "✨ 高" : "◐ 低"}

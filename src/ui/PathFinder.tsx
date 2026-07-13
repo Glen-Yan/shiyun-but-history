@@ -38,7 +38,7 @@ export function PathFinder() {
           fontWeight: pathResult ? 600 : undefined,
         }}
       >
-        🔍 关系寻路{pathResult ? ` · ${pathResult.path.length - 1}步` : ""}
+        🔗 关系寻路{pathResult ? ` · ${pathResult.path.length - 1}步` : ""}
       </button>
 
       {open && (
