@@ -9,10 +9,7 @@ export function HUD() {
   const quality = useStore(s => s.quality);
   const toggleQuality = useStore(s => s.toggleQuality);
   const toggleUI = useStore(s => s.toggleUI);
-  const showRelations = useStore(s => s.showRelations);
-  const toggleRelations = useStore(s => s.toggleRelations);
   const speed = useStore(s => s.speed);
-  const pathResult = useStore(s => s.pathResult);
 
   if (!loaded) return null;
 
@@ -26,9 +23,6 @@ export function HUD() {
         <div className="hud-actions">
           <DynastyFilter />
           <span className="hud-info">⚡{Math.round(speed * 100)}%</span>
-          <button className="hud-btn" onClick={toggleRelations} title="关系连线">
-            {showRelations ? "🔗" : "🔗‍💬"}
-          </button>
           <PathFinder />
           <button className="hud-btn" onClick={toggleQuality} title="画质切换">
             {quality === "high" ? "✨ 高" : "◐ 低"}

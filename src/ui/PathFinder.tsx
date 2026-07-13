@@ -15,8 +15,6 @@ export function PathFinder() {
   const setPathStart = useStore(s => s.setPathStart);
   const setPathEnd = useStore(s => s.setPathEnd);
   const setPathResult = useStore(s => s.setPathResult);
-  const showRelations = useStore(s => s.showRelations);
-
   const [open, setOpen] = useState(false);
   const [q1, setQ1] = useState("");
   const [q2, setQ2] = useState("");
@@ -29,9 +27,18 @@ export function PathFinder() {
 
   return (
     <>
-      {/* 触发按钮 */}
-      <button className="hud-btn" onClick={() => setOpen(!open)} title="关系寻路">
-        {open ? "✕" : "🔗"} {pathResult ? `(${pathResult.path.length - 1}步)` : ""}
+      {/* 触发按钮 — 突出显示 */}
+      <button
+        className="hud-btn"
+        onClick={() => setOpen(!open)}
+        title="关系寻路 · 六度分隔"
+        style={{
+          background: open || pathResult ? "rgba(79, 195, 247, 0.18)" : undefined,
+          border: open || pathResult ? "1px solid rgba(79, 195, 247, 0.35)" : undefined,
+          fontWeight: pathResult ? 600 : undefined,
+        }}
+      >
+        🔍 关系寻路{pathResult ? ` · ${pathResult.path.length - 1}步` : ""}
       </button>
 
       {open && (
@@ -212,11 +219,6 @@ export function PathFinder() {
                       );
                     })()}
 
-                    {!showRelations && (
-                      <div style={{ marginTop: 6, fontSize: 10, color: "rgba(255,255,255,0.3)" }}>
-                        开启关系连线以查看3D路径
-                      </div>
-                    )}
                   </>
                 )}
               </div>
