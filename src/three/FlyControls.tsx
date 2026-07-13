@@ -114,13 +114,15 @@ export function FlyControls() {
   // ── 飞行到目标人物 ──
   const flyRef = useRef<THREE.Vector3 | null>(null);
   useEffect(() => {
-    const unsub = useStore.subscribe(s => {
-      if (s.flyTarget) {
-        flyRef.current = new THREE.Vector3(s.flyTarget[0], s.flyTarget[1], s.flyTarget[2]);
-        // 清除 flyTarget，避免重复触发
-        if (s.flyTarget) useStore.getState().flyToPerson(null);
+    // 只监听 flyTarget 的变化，避免每次 store 变化都触发
+    const unsub = useStore.subscribe(
+      (s) => s.flyTarget,
+      (flyTarget) => {
+        if (flyTarget) {
+          flyRef.current = new THREE.Vector3(flyTarget[0], flyTarget[1], flyTarget[2]);
+        }
       }
-    });
+    );
     return unsub;
   }, []);
 
@@ -128,21 +130,25 @@ export function FlyControls() {
   useFrame((_, dt) => {
     const st = useStore.getState();
     if (st.cinema) return;
+    const safeDt = Math.min(dt, 0.1);
 
-    // 相机飞向目标（平滑插值）
+    // 相机飞向目标
     if (flyRef.current) {
       const target = flyRef.current;
       const dir = target.clone().sub(camera.position);
-      // 目标在人物外围停住（距离 ~300）
       const dist = dir.length();
-      if (dist < 350) {
-        flyRef.current = null; // 到达，停止飞行
+      if (dist < 250) {
+        flyRef.current = null;
+        useStore.getState().flyToPerson(null);
       } else {
         dir.normalize();
-        const speed = Math.max(200, dist * 0.15) * Math.min(dt, 0.05);
+        // 速度 = 当前距离的 8% 每秒，最低 300 单位/秒
+        const speed = Math.max(300, dist * 0.08) * safeDt;
         camera.position.add(dir.multiplyScalar(speed));
-        // 让相机看向目标
+        // 平滑看向目标
         camera.lookAt(target);
+        // 同步欧拉角
+        euler.current.setFromQuaternion(camera.quaternion);
       }
       return;
     }
