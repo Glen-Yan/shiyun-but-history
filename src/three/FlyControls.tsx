@@ -113,16 +113,15 @@ export function FlyControls() {
 
   // ── 飞行到目标人物 ──
   const flyRef = useRef<THREE.Vector3 | null>(null);
+  const prevTarget = useRef<[number, number, number] | null>(null);
   useEffect(() => {
-    // 只监听 flyTarget 的变化，避免每次 store 变化都触发
-    const unsub = useStore.subscribe(
-      (s) => s.flyTarget,
-      (flyTarget) => {
-        if (flyTarget) {
-          flyRef.current = new THREE.Vector3(flyTarget[0], flyTarget[1], flyTarget[2]);
-        }
+    const unsub = useStore.subscribe((s) => {
+      const ft = s.flyTarget;
+      if (ft && ft !== prevTarget.current) {
+        prevTarget.current = ft;
+        flyRef.current = new THREE.Vector3(ft[0], ft[1], ft[2]);
       }
-    );
+    });
     return unsub;
   }, []);
 
