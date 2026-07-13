@@ -61,7 +61,7 @@ export function FlyControls() {
       drag.current.lastY = e.clientY;
       drag.current.moved += Math.abs(dx) + Math.abs(dy);
       // 拖拽旋转
-      const s = 0.0024;
+      const s = 0.0012;
       euler.current.y -= dx * s;
       euler.current.x -= dy * s;
       euler.current.x = Math.max(-Math.PI / 2 + 0.02, Math.min(Math.PI / 2 - 0.02, euler.current.x));
