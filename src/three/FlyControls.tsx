@@ -121,7 +121,7 @@ export function FlyControls() {
         // 直接瞬移到人物前方
         const target = new THREE.Vector3(ft[0], ft[1], ft[2]);
         // 相机停在人物外 300 单位，从上方斜看
-        const offset = new THREE.Vector3(200, 200, 300);
+        const offset = new THREE.Vector3(300, 300, 450);
         camera.position.copy(target).add(offset);
         camera.lookAt(target);
         euler.current.setFromQuaternion(camera.quaternion);
