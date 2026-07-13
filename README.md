@@ -45,11 +45,10 @@
 <table>
 <tr>
 <td width="50%"><img src="public/screenshots/galaxy.png" alt="人物星系总览" /><br/><sub><b>人物星系总览</b> — 每颗星是一个历史人物，按朝代分布在不同半径的球壳上。</sub></td>
-<td width="50%"><img src="public/screenshots/detail.png" alt="人物详情面板" /><br/><sub><b>人物详情</b> — 点击一颗星查看生平信息与著作。</sub></td>
+<td width="50%"><img src="public/screenshots/relations.png" alt="关系网络与路径" /><br/><sub><b>关系网络与路径查找</b> — 选中人物后显示师生/亲属/交往等关系弧线，支持查找两人之间的最短关系路径。</sub></td>
 </tr>
 <tr>
-<td width="50%"><img src="public/screenshots/relations.png" alt="关系网络" /><br/><sub><b>关系网络</b> — 选中人物后显示师生/亲属/交往等关系弧线。</sub></td>
-<td width="50%"><img src="public/screenshots/search.png" alt="搜索与路径" /><br/><sub><b>搜索与路径</b> — 按姓名搜索，查找两人之间的最短关系路径。</sub></td>
+<td width="50%"><img src="public/screenshots/search.png" alt="人物搜索" /><br/><sub><b>人物搜索</b> — 按姓名搜索，快速定位到任意历史人物，查看生平信息与著作。</sub></td>
 </tr>
 </table>
 
