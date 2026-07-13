@@ -86,7 +86,7 @@ export async function loadData(): Promise<void> {
   _loading = true;
 
   try {
-    const base = "/data/";
+    const base = import.meta.env.BASE_URL + "data/";
     let manifest: Manifest | null = null;
     try {
       const resp = await fetch(base + "manifest.json");
@@ -169,7 +169,7 @@ export async function loadDetails(id: string): Promise<PersonRecord | null> {
   const bucket = (id.charCodeAt(1) || 0) % 256;
   const shard = bucket.toString(16).padStart(2, "0");
   try {
-    const resp = await fetch(`/data/persons/${shard}.json`);
+    const resp = await fetch(`${import.meta.env.BASE_URL}data/persons/${shard}.json`);
     if (!resp.ok) return null;
     const data: Record<string, PersonRecord> = await resp.json();
     for (const [k, v] of Object.entries(data)) _details.set(k, v);
