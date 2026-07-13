@@ -98,7 +98,7 @@ export async function loadData(): Promise<void> {
       _manifest = manifest;
       const totalChunks = manifest.shardCount;
 
-      // 1. 同步加载 chunk 0（首屏）
+      // 1. 同步加载 chunk 0（首屏 — 必须完成才算 ready）
       try {
         const resp = await fetch(base + "persons/index_0.json");
         if (resp.ok) {
@@ -109,31 +109,33 @@ export async function loadData(): Promise<void> {
         }
       } catch (e) { console.warn("Chunk 0 failed:", e); }
 
-      // 2. 触发首屏渲染
+      // 2. 首屏就绪，函数返回，关闭 loading（剩余数据后台加载）
       _loaded = true;
 
-      // 3. 后台流式加载剩余 chunk
-      for (let i = 1; i < totalChunks; i++) {
-        try {
-          const resp = await fetch(`${base}persons/index_${i}.json`);
-          if (resp.ok) {
-            const chunk: PersonIndex[] = await resp.json();
-            _index = [..._index, ...chunk];
-            rebuildMaps();
-            _onChunk?.();
-            console.log(`Chunk ${i} loaded: ${chunk.length} persons (total: ${_index.length})`);
-          }
-        } catch (e) { console.warn(`Chunk ${i} failed:`, e); }
-      }
-
-      // 4. 后台加载关系（最后）
-      try {
-        const relResp = await fetch(base + "relations.json");
-        if (relResp.ok) {
-          _relations = await relResp.json();
-          console.log(`Relations loaded: ${_relations.length}`);
+      // 3. 后台流式加载剩余 chunk（不阻塞首屏）
+      (async () => {
+        for (let i = 1; i < totalChunks; i++) {
+          try {
+            const resp = await fetch(`${base}persons/index_${i}.json`);
+            if (resp.ok) {
+              const chunk: PersonIndex[] = await resp.json();
+              _index = [..._index, ...chunk];
+              rebuildMaps();
+              _onChunk?.();
+              console.log(`Chunk ${i} loaded: ${chunk.length} persons (total: ${_index.length})`);
+            }
+          } catch (e) { console.warn(`Chunk ${i} failed:`, e); }
         }
-      } catch {}
+
+        // 4. 后台加载关系
+        try {
+          const relResp = await fetch(base + "relations.json");
+          if (relResp.ok) {
+            _relations = await relResp.json();
+            console.log(`Relations loaded: ${_relations.length}`);
+          }
+        } catch {}
+      })();
 
     } else if (manifest && manifest.personCount > 0) {
       // 旧版格式：单文件
